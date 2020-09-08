@@ -44,6 +44,7 @@ namespace Prometheus_CreateExcelFromCsv
             {
                 MessageBox.Show("レポート作成に成功しました。");
                 
+                // Excelファイルのフォルダを開くか確認
                 string message = "作成したexcelファイルのフォルダを開きますか？";
                 string caption = "Open Directory";
                 MessageBoxButtons buttons = MessageBoxButtons.YesNo;
