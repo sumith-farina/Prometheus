@@ -1,0 +1,10 @@
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.csprojAssemblyReference.cache
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.Form1.resources
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.Properties.Resources.resources
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.csproj.GenerateResource.cache
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\bin\Debug\Prometheus_CreateExcelFromCsv.exe.config
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\bin\Debug\Prometheus_CreateExcelFromCsv.exe
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\bin\Debug\Prometheus_CreateExcelFromCsv.pdb
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.exe
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.pdb
+C:\Users\z00h231289\Documents\C#\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.csproj.ResolveComReference.cache
