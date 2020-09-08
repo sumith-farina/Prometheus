@@ -401,6 +401,7 @@ public class CreateExcelFromCsv
             retDicList.Add(errorDic);
         }
 
+        // DictionaryのList(DataNameでフィルターをかけられた)を返す
         return retDicList;
     }
 
