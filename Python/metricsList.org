@@ -1,0 +1,4 @@
+up
+hrStorageAllocationUnits
+hrStorageUsed
+windows_cpu_time_total
