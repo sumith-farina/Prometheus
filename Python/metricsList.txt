@@ -1,0 +1,1 @@
+windows_service_state{instance="192.168.1.211:9182",job="windows_node_exporter",name="xblauthmanager",state="running"}

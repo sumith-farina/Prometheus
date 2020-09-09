@@ -1,0 +1,1 @@
+powershell ‪"C:\csv\Python_exec_org.ps1"
