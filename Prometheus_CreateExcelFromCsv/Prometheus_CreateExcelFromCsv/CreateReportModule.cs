@@ -170,7 +170,7 @@ public class CreateExcelFromCsv
 
         // Excelワークブックの作成
         ExcelApp = new Microsoft.Office.Interop.Excel.Application();
-        //ExcelApp.Visible = true; // ※検証用　本番時はコメントアウトもしくは削除するコード
+        ExcelApp.Visible = true; // ※検証用　本番時はコメントアウトもしくは削除するコード
         wbs = ExcelApp.Workbooks;
         wb = wbs.Add();
 
@@ -198,46 +198,41 @@ public class CreateExcelFromCsv
         //cellの初期設定(ワークシートのセルオブジェクト取得)
         var cells = ws.Cells;
 
-        // dataNameを取得し、dataName(リスト)へ格納
-        for (int i = 0; i < csvDicList.Count(); i++)
+        // IPアドレスの分別(表の縦列になる)
+        for (int j = 0; j < csvDicList.Count(); j++)
         {
-            // dName にcsvの全ての「DataName」キーの値を検索し、dataNameに含まれていない場合はその「DataName」を追加する
-            dName = csvDicList[i]["DataName"];
-            if (dataName.Contains(dName) != true)
+            ipAddress = dataDicList[j]["IP"];
+            if (ipList.Contains(ipAddress) != true)
             {
-                dataName.Add(dName);
-                if (dName.Length > MaxLength)
-                {
-                    dName = dName.Substring(0, MaxLength);
-                }
-                // 一番最初のシート以外はシートを追加する
-                if (count != 1)
-                {
-                    wb.Sheets.Add();
-                }
-                count = count + 1;
+                ipList.Add(ipAddress);
             }
+            if (count != 1)
+            {
+                wb.Sheets.Add();
+            }
+            count = count + 1;
         }
+        ipList.Sort();
 
-        // 「DataName」で作成されたリスト「dataName」から各シートの名前を一意に決定する
-        for (int i = 1; i < count; i++ )
+        // IPアドレスもしくはホスト名でシート作成
+        for (int i = 1; i < count; i++)
         {
             ws = shs[i];
             // 31文字以上の場合、エクセルのシート名に使用できないため、31文字以降を削除
-            if (dataName[i-1].Length > MaxLength)
+            if (ipList[i - 1].Length > MaxLength)
             {
-                dName = dataName[i-1].Substring(0, MaxLength);
+                ipAddress = ipList[i - 1].Substring(0, MaxLength);
             }
             else
             {
-                dName = dataName[i-1];
+                ipAddress = ipList[i - 1];
             }
             // ワークシートの名前を変更
             ws.Name = dName;
         }
 
         // dataNameシートごとのデータでグラフを作成
-        for (int i = 0; i < dataName.Count(); i++)
+        for (int i = 0; i < ipList.Count(); i++)
         {
             // シート名からシート番号を取得し、シートオブジェクトを取得
             ws = wb.Sheets[getSheetIndex(dataName[i], wb.Sheets)];
@@ -255,16 +250,17 @@ public class CreateExcelFromCsv
             // シート名に応じたデータを取得
             dataDicList = GetSpecifiedDataDictionaryList(ws.Name,csvDicList);
 
-            // IPアドレスの分別(表の縦列になる)
-            for (int j = 0; j < dataDicList.Count(); j++)
+            // dataNameの分別(表の縦列になる)
+            for (int j = 0; i < csvDicList.Count(); j++)
             {
-                ipAddress = dataDicList[j]["IP"];
-                if (ipList.Contains(ipAddress) != true)
+                // dName にcsvの全ての「DataName」キーの値を検索し、dataNameに含まれていない場合はその「DataName」を追加する
+                dName = dataDicList[j]["DataName"];
+                if (dataName.Contains(dName) != true)
                 {
-                    ipList.Add(ipAddress);
+                    dataName.Add(dName);
                 }
             }
-            ipList.Sort();
+            dataName.Sort();
 
             // 日付の分別(表の横列になる)
             for (int j = 0; j < dataDicList.Count(); j++)
