@@ -199,18 +199,19 @@ public class CreateExcelFromCsv
         var cells = ws.Cells;
 
         // IPアドレスの分別(表の縦列になる)
-        for (int j = 0; j < csvDicList.Count(); j++)
+        for (int i = 0; i < csvDicList.Count(); i++)
         {
-            ipAddress = dataDicList[j]["IP"];
+            ipAddress = csvDicList[i]["IP"];
             if (ipList.Contains(ipAddress) != true)
             {
                 ipList.Add(ipAddress);
+                if (count != 1)
+                {
+                    wb.Sheets.Add();
+                }
+                count = count + 1;
+
             }
-            if (count != 1)
-            {
-                wb.Sheets.Add();
-            }
-            count = count + 1;
         }
         ipList.Sort();
 
@@ -231,7 +232,7 @@ public class CreateExcelFromCsv
             ws.Name = dName;
         }
 
-        // dataNameシートごとのデータでグラフを作成
+        // ipListシートごとのデータでグラフを作成
         for (int i = 0; i < ipList.Count(); i++)
         {
             // シート名からシート番号を取得し、シートオブジェクトを取得
@@ -402,7 +403,7 @@ public class CreateExcelFromCsv
             var dic = new Dictionary<string, string>();
 
             // 「DataName」とシート名が等しいときにretDicListにdictionaryを追加する
-            if(csvList[j]["DataName"] == sheetName)
+            if(csvList[j]["IP"] == sheetName)
             {
                 dic.Add("IP", csvList[j]["IP"]);
                 dic.Add("DataName", csvList[j]["DataName"]);
