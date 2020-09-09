@@ -18,3 +18,4 @@ C:\Users\z00h231289\source\repos\Prometheus_Code\Prometheus_CreateExcelFromCsv\P
 C:\Users\z00h231289\source\repos\Prometheus_Code\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.csproj.CoreCompileInputs.cache
 C:\Users\z00h231289\source\repos\Prometheus_Code\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.exe
 C:\Users\z00h231289\source\repos\Prometheus_Code\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.pdb
+C:\Users\z00h231289\source\repos\Prometheus_Code\Prometheus_CreateExcelFromCsv\Prometheus_CreateExcelFromCsv\obj\Debug\Prometheus_CreateExcelFromCsv.csprojAssemblyReference.cache

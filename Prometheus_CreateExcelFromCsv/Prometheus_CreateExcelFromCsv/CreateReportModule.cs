@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
+using Prometheus_CreateExcelFromCsv;
 
 
 // 「※」マークは基本検証時の確認コードのため、本番時は不要となるので削除もしくはコメントアウトすること
@@ -153,6 +154,12 @@ public class CreateExcelFromCsv
     private bool createReportCore(List<Dictionary<string, string>> csvDicList, string folderPath)
     {
         bool bRet = false;
+
+        Form1 f = new Form1();
+        f = Form1.Form1Instance;
+
+        int rdoButtonValue = f.getRadioButtonValue();
+
 
         // 各Excelオブジェクトの初期化
         Microsoft.Office.Interop.Excel.Application ExcelApp = null;
@@ -324,7 +331,23 @@ public class CreateExcelFromCsv
             ChartTitle chtTitle = chart.ChartTitle;
             chtTitle.Text = ws.Name;
 
-            chart.ChartType = XlChartType.xlLine;
+            //グラフタイプ選択
+            if (f.getRadioButtonValue() == 1)
+            {
+                chart.ChartType = XlChartType.xlLine;
+            }
+            else if (f.getRadioButtonValue() == 2)
+            {
+                chart.ChartType = XlChartType.xlColumnStacked;
+            }
+            else if (f.getRadioButtonValue() == 3)
+            {
+                chart.ChartType = XlChartType.xlBarStacked;
+            }
+            else
+            {
+                chart.ChartType = XlChartType.xlLine;
+            }
             Range chartRange = ws.Range[ws.Cells[1, 1], ws.Cells[ipList.Count() + 1, dateList.Count() + 1]];
             chart.SetSourceData(chartRange);
 
