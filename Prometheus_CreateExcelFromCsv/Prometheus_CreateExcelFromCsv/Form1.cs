@@ -95,6 +95,30 @@ namespace Prometheus_CreateExcelFromCsv
             }
         }
 
+        private void csvFilePath_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
+        {
+            //コントロール内にドラッグされたとき実行される
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                //ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
+                e.Effect = DragDropEffects.Copy;
+            else
+                //ファイル以外は受け付けない
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void csvFilePath_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
+        {
+            //コントロール内にドロップされたとき実行される
+            //ドロップされたファイル名を取得する
+            string[] fileName = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+
+            foreach (string dropItem in fileName)
+            {
+                csvFilePath.Clear();
+                csvFilePath.Text=dropItem;
+            }
+        }
+
         public enum RadioButtonValue
         {
             rdoLineButton = 1,

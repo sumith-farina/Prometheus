@@ -177,7 +177,8 @@ public class CreateExcelFromCsv
         // Excelシートの作成
         int count = 1; // sheet用カウント変数
         shs = wb.Sheets; // ワークブックの全てのシートオブジェクト
-        List<string> dataName = new List<string>(); // dataNameを格納するList
+        List<string> dataNameList = new List<string>(); // dataNameを格納するList
+        List<string> optionList = new List<string>();
         List<string> ipList = new List<string>(); // ipアドレスを格納するList
         List<string> dateList = new List<string>(); // 日付情報を格納するList
 
@@ -210,7 +211,6 @@ public class CreateExcelFromCsv
                     wb.Sheets.Add();
                 }
                 count = count + 1;
-
             }
         }
         ipList.Sort();
@@ -229,14 +229,14 @@ public class CreateExcelFromCsv
                 ipAddress = ipList[i - 1];
             }
             // ワークシートの名前を変更
-            ws.Name = dName;
+            ws.Name = ipAddress;
         }
 
         // ipListシートごとのデータでグラフを作成
         for (int i = 0; i < ipList.Count(); i++)
         {
             // シート名からシート番号を取得し、シートオブジェクトを取得
-            ws = wb.Sheets[getSheetIndex(dataName[i], wb.Sheets)];
+            ws = wb.Sheets[getSheetIndex(ipList[i], wb.Sheets)];
             // ws.Activate();  // ※検証用 ワークシートオブジェクトの取得を確認する
             cells = ws.Cells;
 
@@ -252,16 +252,24 @@ public class CreateExcelFromCsv
             dataDicList = GetSpecifiedDataDictionaryList(ws.Name,csvDicList);
 
             // dataNameの分別(表の縦列になる)
-            for (int j = 0; i < csvDicList.Count(); j++)
+            for (int j = 0; j < dataDicList.Count(); j++)
             {
                 // dName にcsvの全ての「DataName」キーの値を検索し、dataNameに含まれていない場合はその「DataName」を追加する
                 dName = dataDicList[j]["DataName"];
-                if (dataName.Contains(dName) != true)
+                if (dataNameList.Contains(dName) != true)
                 {
-                    dataName.Add(dName);
+                    if (dName.Contains("Option"))
+                    {
+                        optionList.Add(dName);
+                    }
+                    else
+                    {
+                        dataNameList.Add(dName);
+                    }
                 }
             }
-            dataName.Sort();
+            dataNameList.Sort();
+            optionList.Sort();
 
             // 日付の分別(表の横列になる)
             for (int j = 0; j < dataDicList.Count(); j++)
@@ -280,10 +288,10 @@ public class CreateExcelFromCsv
                 cells[1, j+2].Value = dateList[j];
             }
 
-            // IP情報書込み(Y列)
-            for (int j = 0; j < ipList.Count; j++)
+            // DataName情報書込み(Y列)
+            for (int j = 0; j < dataNameList.Count; j++)
             {
-                cells[j+2, 1].Value = ipList[j];
+                cells[j+2, 1].Value = dataNameList[j];
 
             }
 
@@ -291,15 +299,15 @@ public class CreateExcelFromCsv
             cnt = 0;
             while(cnt < dataDicList.Count())
             {
-                for(int j = 0; j< ipList.Count(); j++)
+                for(int j = 0; j< dataNameList.Count(); j++)
                 {
-                    string cellip = ipList[j];
+                    string celldataName = dataNameList[j];
                     for(int k = 0; k < dateList.Count(); k++)
                     {
                         //string celltm = cells[1, k + 2].Value.ToString();
                         //celltm = celltm.Substring(0, 10);
                         string celltm = dateList[k];
-                        if (cellip == dataDicList[cnt]["IP"] && celltm == dataDicList[cnt]["Time"])
+                        if (celldataName == dataDicList[cnt]["DataName"] && celltm == dataDicList[cnt]["Time"])
                         {
                             cells[j + 2, k + 2].Value = dataDicList[cnt]["Value"];
                             goto NEXT;
@@ -318,40 +326,55 @@ public class CreateExcelFromCsv
 
             // グラフ作成
             var chartObjs = ws.ChartObjects() as ChartObjects;
-            double chartTop = (18.75 * (ipList.Count() + 2));
+            double chartTop = (18.75 * (dataNameList.Count() + 2));
             double chartLeft = 10;
-            double chartWidth = 750;
-            double chartHeight = 500;
-            var chartObj = chartObjs.Add(chartLeft,chartTop,chartWidth,chartHeight);
+            double chartWidth = 550;
+            double chartHeight = 350;
+            var chartObj = chartObjs.Add(chartLeft, chartTop, chartWidth, chartHeight);
             var chart = chartObj.Chart;
             chart.HasTitle = true;
             ChartTitle chtTitle = chart.ChartTitle;
             chtTitle.Text = ws.Name;
+            var chartType = chart.ChartType;
 
             //グラフタイプ選択
             if (f.getRadioButtonValue() == 1)
             {
                 chart.ChartType = XlChartType.xlLine;
+                chartType = XlChartType.xlLine;
             }
             else if (f.getRadioButtonValue() == 2)
             {
                 chart.ChartType = XlChartType.xlColumnStacked;
+                chartType = XlChartType.xlColumnStacked;
             }
             else if (f.getRadioButtonValue() == 3)
             {
                 chart.ChartType = XlChartType.xlBarStacked;
+                chartType = XlChartType.xlBarStacked;
             }
             else
             {
                 chart.ChartType = XlChartType.xlLine;
+                chartType = XlChartType.xlLine;
             }
-            Range chartRange = ws.Range[ws.Cells[1, 1], ws.Cells[ipList.Count() + 1, dateList.Count() + 1]];
-            chart.SetSourceData(chartRange);
+
+            for (int j=0; j<dataNameList.Count;j++)
+            {
+                chartObj = chartObjs.Add(chartLeft+j*chartWidth, chartTop, chartWidth, chartHeight);
+                chart = chartObj.Chart;
+                chart.ChartType = chartType;
+                Range chartRange1 = ws.Range[ws.Cells[1, 1], ws.Cells[1, dateList.Count() + 1]];
+                Range chartRange2 = ws.Range[ws.Cells[j + 2, 1], ws.Cells[j + 2, dateList.Count() + 1]];
+                Range test = ws.Range[chartRange1,chartRange2];
+                //chart.SetSourceData(chartRange);
+                chart.SetSourceData(test);
+            }
 
         }
 
         //excelファイルの保存
-        ws = wb.Sheets[getSheetIndex(dataName[0], wb.Sheets)];
+        ws = wb.Sheets[getSheetIndex(ipList[0], wb.Sheets)];
         ws.Activate();
         string timeName = DateTime.Now.ToString("yyyy年MM月dd日");
         wb.SaveAs(folderPath + @"\" + timeName + @"_MonthlyReport.xlsx");
