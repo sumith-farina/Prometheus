@@ -37,9 +37,9 @@
             this.rdoColumnButton = new System.Windows.Forms.RadioButton();
             this.rdoLineButton = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.ReportBaseButton = new System.Windows.Forms.RadioButton();
-            this.ReportBaseOnly = new System.Windows.Forms.RadioButton();
             this.ReportOptionOnly = new System.Windows.Forms.RadioButton();
+            this.ReportBaseOnly = new System.Windows.Forms.RadioButton();
+            this.ReportBaseButton = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -148,6 +148,31 @@
             this.groupBox3.TabIndex = 7;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Excel作成オプション";
+            this.groupBox3.Visible = false;
+            // 
+            // ReportOptionOnly
+            // 
+            this.ReportOptionOnly.AutoSize = true;
+            this.ReportOptionOnly.Location = new System.Drawing.Point(18, 87);
+            this.ReportOptionOnly.Name = "ReportOptionOnly";
+            this.ReportOptionOnly.Size = new System.Drawing.Size(87, 16);
+            this.ReportOptionOnly.TabIndex = 2;
+            this.ReportOptionOnly.TabStop = true;
+            this.ReportOptionOnly.Text = "オプションのみ";
+            this.ReportOptionOnly.UseVisualStyleBackColor = true;
+            this.ReportOptionOnly.Visible = false;
+            // 
+            // ReportBaseOnly
+            // 
+            this.ReportBaseOnly.AutoSize = true;
+            this.ReportBaseOnly.Location = new System.Drawing.Point(18, 53);
+            this.ReportBaseOnly.Name = "ReportBaseOnly";
+            this.ReportBaseOnly.Size = new System.Drawing.Size(68, 16);
+            this.ReportBaseOnly.TabIndex = 1;
+            this.ReportBaseOnly.TabStop = true;
+            this.ReportBaseOnly.Text = "基本のみ";
+            this.ReportBaseOnly.UseVisualStyleBackColor = true;
+            this.ReportBaseOnly.Visible = false;
             // 
             // ReportBaseButton
             // 
@@ -160,28 +185,7 @@
             this.ReportBaseButton.TabStop = true;
             this.ReportBaseButton.Text = "基本レポート + オプションレポート";
             this.ReportBaseButton.UseVisualStyleBackColor = true;
-            // 
-            // ReportBaseOnly
-            // 
-            this.ReportBaseOnly.AutoSize = true;
-            this.ReportBaseOnly.Location = new System.Drawing.Point(18, 53);
-            this.ReportBaseOnly.Name = "ReportBaseOnly";
-            this.ReportBaseOnly.Size = new System.Drawing.Size(68, 16);
-            this.ReportBaseOnly.TabIndex = 1;
-            this.ReportBaseOnly.TabStop = true;
-            this.ReportBaseOnly.Text = "基本のみ";
-            this.ReportBaseOnly.UseVisualStyleBackColor = true;
-            // 
-            // ReportOptionOnly
-            // 
-            this.ReportOptionOnly.AutoSize = true;
-            this.ReportOptionOnly.Location = new System.Drawing.Point(18, 87);
-            this.ReportOptionOnly.Name = "ReportOptionOnly";
-            this.ReportOptionOnly.Size = new System.Drawing.Size(87, 16);
-            this.ReportOptionOnly.TabIndex = 2;
-            this.ReportOptionOnly.TabStop = true;
-            this.ReportOptionOnly.Text = "オプションのみ";
-            this.ReportOptionOnly.UseVisualStyleBackColor = true;
+            this.ReportBaseButton.Visible = false;
             // 
             // Form1
             // 
