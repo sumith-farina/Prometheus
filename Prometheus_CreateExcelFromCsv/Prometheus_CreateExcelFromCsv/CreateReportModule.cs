@@ -160,7 +160,6 @@ public class CreateExcelFromCsv
 
         int rdoButtonValue = f.getRadioButtonValue();
 
-
         // 各Excelオブジェクトの初期化
         Microsoft.Office.Interop.Excel.Application ExcelApp = null;
         Microsoft.Office.Interop.Excel.Workbooks wbs = null;
@@ -260,7 +259,10 @@ public class CreateExcelFromCsv
                 {
                     if (dName.Contains("Option"))
                     {
-                        optionList.Add(dName);
+                        if (optionList.Contains(dName) != true)
+                        {
+                            optionList.Add(dName);
+                        }
                     }
                     else
                     {
@@ -359,16 +361,20 @@ public class CreateExcelFromCsv
                 chartType = XlChartType.xlLine;
             }
 
+            // グラフ描画
             for (int j=0; j<dataNameList.Count;j++)
             {
-                chartObj = chartObjs.Add(chartLeft+j*chartWidth, chartTop, chartWidth, chartHeight);
+                chartObj = chartObjs.Add(chartLeft+j*(chartWidth+chartLeft), chartTop, chartWidth, chartHeight);
                 chart = chartObj.Chart;
                 chart.ChartType = chartType;
                 Range chartRange1 = ws.Range[ws.Cells[1, 1], ws.Cells[1, dateList.Count() + 1]];
                 Range chartRange2 = ws.Range[ws.Cells[j + 2, 1], ws.Cells[j + 2, dateList.Count() + 1]];
                 Range test = ws.Range[chartRange1,chartRange2];
+                Range cRange = ExcelApp.Union(chartRange1, chartRange2);
+                //Microsoft.Office.Interop.Excel.Ranges chartRanges = ws.Ranges[chartRange1, chartRange2];
                 //chart.SetSourceData(chartRange);
-                chart.SetSourceData(test);
+                chart.SetSourceData(cRange);
+                
             }
 
         }
@@ -394,6 +400,12 @@ public class CreateExcelFromCsv
         ExcelApp = null;
 
         GC.Collect();
+
+        // オプション項目描画
+        if (optionList.Count() > 0)
+        {
+            createOptionReport();
+        }
 
         bRet = true;
 
@@ -446,6 +458,11 @@ public class CreateExcelFromCsv
 
         // DictionaryのList(DataNameでフィルターをかけられた)を返す
         return retDicList;
+    }
+
+    private static void createOptionReport()
+    {
+        
     }
 
 }
