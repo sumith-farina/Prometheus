@@ -57,6 +57,26 @@ namespace Prometheus_CreateExcelFromCsv
 
         }
 
+        public int getReportButtonValue()
+        {
+            if (ReportBaseButton.Checked == true)
+            {
+                return (int)ReportOptionButtonValue.rdoBase;
+            }
+            else if (ReportBaseOnly.Checked == true)
+            {
+                return (int)ReportOptionButtonValue.rdoBaseOnly;
+            }
+            else if (ReportOptionOnly.Checked == true)
+            {
+                return (int)ReportOptionButtonValue.rdoOptionOnly;
+            }
+            else
+            {
+                return (int)ReportOptionButtonValue.NoSelect;
+            }
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             // テキストボックスにデフォルトで名前を記載
@@ -124,6 +144,14 @@ namespace Prometheus_CreateExcelFromCsv
             rdoLineButton = 1,
             rdoColumnButton,
             rdoBarButton,
+            NoSelect = -1
+        }
+
+        public enum ReportOptionButtonValue
+        {
+            rdoBase = 1,
+            rdoBaseOnly,
+            rdoOptionOnly,
             NoSelect = -1
         }
     }

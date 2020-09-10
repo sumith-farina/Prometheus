@@ -31,13 +31,18 @@
             this.button1 = new System.Windows.Forms.Button();
             this.createReportButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.rdoLineButton = new System.Windows.Forms.RadioButton();
-            this.rdoColumnButton = new System.Windows.Forms.RadioButton();
-            this.rdoBarButton = new System.Windows.Forms.RadioButton();
             this.csvFilePath = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.rdoBarButton = new System.Windows.Forms.RadioButton();
+            this.rdoColumnButton = new System.Windows.Forms.RadioButton();
+            this.rdoLineButton = new System.Windows.Forms.RadioButton();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ReportBaseButton = new System.Windows.Forms.RadioButton();
+            this.ReportBaseOnly = new System.Windows.Forms.RadioButton();
+            this.ReportOptionOnly = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -71,52 +76,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "ファイル選択";
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.rdoBarButton);
-            this.groupBox2.Controls.Add(this.rdoColumnButton);
-            this.groupBox2.Controls.Add(this.rdoLineButton);
-            this.groupBox2.Location = new System.Drawing.Point(19, 132);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(361, 82);
-            this.groupBox2.TabIndex = 6;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "グラフ作成";
-            // 
-            // rdoLineButton
-            // 
-            this.rdoLineButton.AutoSize = true;
-            this.rdoLineButton.Checked = true;
-            this.rdoLineButton.Location = new System.Drawing.Point(31, 29);
-            this.rdoLineButton.Name = "rdoLineButton";
-            this.rdoLineButton.Size = new System.Drawing.Size(58, 16);
-            this.rdoLineButton.TabIndex = 7;
-            this.rdoLineButton.TabStop = true;
-            this.rdoLineButton.Text = "折れ線";
-            this.rdoLineButton.UseVisualStyleBackColor = true;
-            // 
-            // rdoColumnButton
-            // 
-            this.rdoColumnButton.AutoSize = true;
-            this.rdoColumnButton.Location = new System.Drawing.Point(135, 29);
-            this.rdoColumnButton.Name = "rdoColumnButton";
-            this.rdoColumnButton.Size = new System.Drawing.Size(47, 16);
-            this.rdoColumnButton.TabIndex = 8;
-            this.rdoColumnButton.TabStop = true;
-            this.rdoColumnButton.Text = "縦棒";
-            this.rdoColumnButton.UseVisualStyleBackColor = true;
-            // 
-            // rdoBarButton
-            // 
-            this.rdoBarButton.AutoSize = true;
-            this.rdoBarButton.Location = new System.Drawing.Point(247, 29);
-            this.rdoBarButton.Name = "rdoBarButton";
-            this.rdoBarButton.Size = new System.Drawing.Size(47, 16);
-            this.rdoBarButton.TabIndex = 9;
-            this.rdoBarButton.TabStop = true;
-            this.rdoBarButton.Text = "横棒";
-            this.rdoBarButton.UseVisualStyleBackColor = true;
-            // 
             // csvFilePath
             // 
             this.csvFilePath.AllowDrop = true;
@@ -132,12 +91,105 @@
             this.csvFilePath.DragDrop += new System.Windows.Forms.DragEventHandler(this.csvFilePath_DragDrop);
             this.csvFilePath.DragEnter += new System.Windows.Forms.DragEventHandler(this.csvFilePath_DragEnter);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.rdoBarButton);
+            this.groupBox2.Controls.Add(this.rdoColumnButton);
+            this.groupBox2.Controls.Add(this.rdoLineButton);
+            this.groupBox2.Location = new System.Drawing.Point(19, 132);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(361, 82);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "グラフ作成";
+            // 
+            // rdoBarButton
+            // 
+            this.rdoBarButton.AutoSize = true;
+            this.rdoBarButton.Location = new System.Drawing.Point(247, 29);
+            this.rdoBarButton.Name = "rdoBarButton";
+            this.rdoBarButton.Size = new System.Drawing.Size(47, 16);
+            this.rdoBarButton.TabIndex = 9;
+            this.rdoBarButton.TabStop = true;
+            this.rdoBarButton.Text = "横棒";
+            this.rdoBarButton.UseVisualStyleBackColor = true;
+            // 
+            // rdoColumnButton
+            // 
+            this.rdoColumnButton.AutoSize = true;
+            this.rdoColumnButton.Location = new System.Drawing.Point(135, 29);
+            this.rdoColumnButton.Name = "rdoColumnButton";
+            this.rdoColumnButton.Size = new System.Drawing.Size(47, 16);
+            this.rdoColumnButton.TabIndex = 8;
+            this.rdoColumnButton.TabStop = true;
+            this.rdoColumnButton.Text = "縦棒";
+            this.rdoColumnButton.UseVisualStyleBackColor = true;
+            // 
+            // rdoLineButton
+            // 
+            this.rdoLineButton.AutoSize = true;
+            this.rdoLineButton.Checked = true;
+            this.rdoLineButton.Location = new System.Drawing.Point(31, 29);
+            this.rdoLineButton.Name = "rdoLineButton";
+            this.rdoLineButton.Size = new System.Drawing.Size(58, 16);
+            this.rdoLineButton.TabIndex = 7;
+            this.rdoLineButton.TabStop = true;
+            this.rdoLineButton.Text = "折れ線";
+            this.rdoLineButton.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.ReportOptionOnly);
+            this.groupBox3.Controls.Add(this.ReportBaseOnly);
+            this.groupBox3.Controls.Add(this.ReportBaseButton);
+            this.groupBox3.Location = new System.Drawing.Point(415, 132);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(292, 127);
+            this.groupBox3.TabIndex = 7;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Excel作成オプション";
+            // 
+            // ReportBaseButton
+            // 
+            this.ReportBaseButton.AutoSize = true;
+            this.ReportBaseButton.Checked = true;
+            this.ReportBaseButton.Location = new System.Drawing.Point(18, 20);
+            this.ReportBaseButton.Name = "ReportBaseButton";
+            this.ReportBaseButton.Size = new System.Drawing.Size(178, 16);
+            this.ReportBaseButton.TabIndex = 0;
+            this.ReportBaseButton.TabStop = true;
+            this.ReportBaseButton.Text = "基本レポート + オプションレポート";
+            this.ReportBaseButton.UseVisualStyleBackColor = true;
+            // 
+            // ReportBaseOnly
+            // 
+            this.ReportBaseOnly.AutoSize = true;
+            this.ReportBaseOnly.Location = new System.Drawing.Point(18, 53);
+            this.ReportBaseOnly.Name = "ReportBaseOnly";
+            this.ReportBaseOnly.Size = new System.Drawing.Size(68, 16);
+            this.ReportBaseOnly.TabIndex = 1;
+            this.ReportBaseOnly.TabStop = true;
+            this.ReportBaseOnly.Text = "基本のみ";
+            this.ReportBaseOnly.UseVisualStyleBackColor = true;
+            // 
+            // ReportOptionOnly
+            // 
+            this.ReportOptionOnly.AutoSize = true;
+            this.ReportOptionOnly.Location = new System.Drawing.Point(18, 87);
+            this.ReportOptionOnly.Name = "ReportOptionOnly";
+            this.ReportOptionOnly.Size = new System.Drawing.Size(87, 16);
+            this.ReportOptionOnly.TabIndex = 2;
+            this.ReportOptionOnly.TabStop = true;
+            this.ReportOptionOnly.Text = "オプションのみ";
+            this.ReportOptionOnly.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(755, 287);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.createReportButton);
             this.Controls.Add(this.groupBox1);
@@ -148,6 +200,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -162,6 +216,10 @@
         private System.Windows.Forms.RadioButton rdoColumnButton;
         private System.Windows.Forms.RadioButton rdoLineButton;
         private System.Windows.Forms.TextBox csvFilePath;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.RadioButton ReportOptionOnly;
+        private System.Windows.Forms.RadioButton ReportBaseOnly;
+        private System.Windows.Forms.RadioButton ReportBaseButton;
     }
 }
 
