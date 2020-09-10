@@ -1,1 +1,4 @@
 windows_service_state{instance="192.168.1.211:9182",job="windows_node_exporter",name="xblauthmanager",state="running"}
+windows_service_state{instance="192.168.1.200:9182",job="windows_node_exporter",name="xblauthmanager",state="running"}
+up{instance="localhost:9100"}
+up{instance="192.168.1.200:9182"}

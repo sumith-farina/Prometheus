@@ -40,7 +40,7 @@ import dict
 #                                                                           #
 # 　　　　　　　　　　　　　        各種定義                                   #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 PROMETHEUS_URL = ''
 
@@ -94,7 +94,7 @@ span = month_ago_ts
 #   「filepath」で指定されたfilepathに対象ファイルが存在するか確認              #
 #     存在しない場合は、プリント文を返し、プログラムを終了する                   #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 def fileExistCheck(filepath):
     fileChk = os.path.exists(filepath) > 0
@@ -109,7 +109,7 @@ def fileExistCheck(filepath):
 #   「url」で指定されたPrometheusのWebクライアントへアクセスし、                #
 #     応答時の「data」全てを返す関数                                          #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 def GetMetrixNames(url):
     response = requests.get('{0}/api/v1/label/__name__/values'.format(url))
@@ -123,7 +123,7 @@ def GetMetrixNames(url):
 #   「filepath」で指定されたfilepathのIPアドレスリストを開き、                  #
 #     アドレスリストを配列に格納して配列を返す関数                              #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 def openIpAddressList(filepath):
     ipAddressFile = open(filepath,"r")
@@ -138,7 +138,7 @@ def openIpAddressList(filepath):
 #   windows_Exporterが動作している対象のWindowsシステムにおいて、          　　#
 #   IPアドレスを利用してメトリックス情報を取得しメモリの使用率をCSV出力する関数　 #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 def WindowsMemoryUsageToCsv():
     winIpLists = openIpAddressList(WINIPADDRESSLIST)
@@ -172,8 +172,8 @@ def WindowsMemoryUsageToCsv():
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
                     #timeValue = str(timeData)
-                    ipAddPort = winIp + ":9182"
-                    writer.writerow([ipAddPort,"MemoryUsage(%)",timeDate, metricValue[1]])
+                    ipAddPort = winIp + "-9182"
+                    writer.writerow([ipAddPort,"1.MemoryUsage(%)",timeDate, metricValue[1]])
 
     return
 
@@ -183,7 +183,7 @@ def WindowsMemoryUsageToCsv():
 #   windows_Exporterが動作している対象のWindowsシステムにおいて、          　　#
 #   IPアドレスを利用してメトリックス情報を取得しCPUの使用率をCSV出力する関数　   #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 def WindowsCpuUsageToCsv():
     winIpLists = openIpAddressList(WINIPADDRESSLIST)
@@ -212,7 +212,7 @@ def WindowsCpuUsageToCsv():
         if status == "error":
             logging.error(response.json())
             sys.exit(2)
-        
+
         coreAmounts = response.json()['data']['result']
         coreAmount = len(coreAmounts)
 
@@ -229,8 +229,8 @@ def WindowsCpuUsageToCsv():
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
                     #コア数で除算し、平均値を抽出
                     cpuUsage = float(metricValue[1])/coreAmount
-                    ipAddPort = winIp + ":9182"
-                    writer.writerow([ipAddPort,"CpuUsage(%)",timeDate, cpuUsage])
+                    ipAddPort = winIp + "-9182"
+                    writer.writerow([ipAddPort,"2.CpuUsage(%)",timeDate, cpuUsage])
     return
 
 #############################################################################
@@ -239,7 +239,7 @@ def WindowsCpuUsageToCsv():
 #   windows_Exporterが動作している対象のWindowsシステムにおいて、          　　#
 #   IPアドレスを利用してメトリックス情報を取得しdiskの使用率をCSV出力する関数    #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 #Diskの使用率はどのドライブをレポートとして提出するのか、確認すること
 def WindowsDiskUsageToCsv():
@@ -272,8 +272,8 @@ def WindowsDiskUsageToCsv():
                 #タイムスタンプと値を記載
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
-                    ipAddPort = winIp + ":9182"
-                    writer.writerow([ipAddPort,"DiskUsage(%)",timeDate, metricValue[1]])
+                    ipAddPort = winIp + "-9182"
+                    writer.writerow([ipAddPort,"3.DiskUsage(%)",timeDate, metricValue[1]])
 
 #   Disk使用率算出(Dドライブ)※追加のドライブが必要な場合はコメントアウトしている部分を解除する
 #   また、ドライブ名については確認すること
@@ -306,7 +306,7 @@ def WindowsDiskUsageToCsv():
 #   IPアドレスを利用してメトリックス情報を取得しネットワークトラフィックの        #
 # 　平均使用byteをcsv出力する関数                                        　   #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 #NIC名指定が必要(顧客によって変更が必要)
 def WindowsNetworkResourceUsageToCsv():
@@ -342,10 +342,10 @@ def WindowsNetworkResourceUsageToCsv():
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
 #                    writeInfo = 'SendingNetworkTraffic(' + nicName + ')'
-                    writeInfo = 'OutboundTraffic'
-                    ipAddPort = winIp + ":9182"
+                    writeInfo = '4.OutboundTraffic'
+                    ipAddPort = winIp + "-9182"
                     writer.writerow([ipAddPort,writeInfo,timeDate, metricValue[1]])
-        
+
         #受信トラフィック算出
         metrixName =  'sum(rate(' + receiveTraffic + '{instance="' + winIp + ':9182"}[1d]))>0'
         response = requests.get(PROMETHEUS_URL + RANGE_QUERY_API,
@@ -372,8 +372,8 @@ def WindowsNetworkResourceUsageToCsv():
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
 #                    writeInfo = 'ReceivingNetworkTraffic(' + nicName + ')'
-                    writeInfo = 'IncomingTraffic'
-                    ipAddPort = winIp + ":9182"
+                    writeInfo = '5.IncomingTraffic'
+                    ipAddPort = winIp + "-9182"
                     writer.writerow([ipAddPort,writeInfo,timeDate, metricValue[1]])
     return
 
@@ -383,7 +383,7 @@ def WindowsNetworkResourceUsageToCsv():
 #   node_Exporterにて監視している対象のLinuxOSについて、                   　　#
 #   IPアドレスを利用してメトリックス情報を取得しメモリの使用率をCSV出力する関数   #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 def NodeMemoryUsageToCsv():
     nodeIpLists = openIpAddressList(NODEIPADDRESSLIST)
@@ -416,8 +416,8 @@ def NodeMemoryUsageToCsv():
                 #タイムスタンプと値を記載
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
-                    ipAddPort = nodeIp + ":9100"
-                    writer.writerow([ipAddPort,"MemoryUsage(%)",timeDate, metricValue[1]])
+                    ipAddPort = nodeIp + "-9100"
+                    writer.writerow([ipAddPort,"1.MemoryUsage(%)",timeDate, metricValue[1]])
 
     return
 
@@ -428,7 +428,7 @@ def NodeMemoryUsageToCsv():
 #   node_Exporterにて監視している対象のLinuxOSについて、                   　　#
 #   IPアドレスを利用してメトリックス情報を取得しCPUの使用率をCSV出力する関数　    #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 def NodeCpuUsageToCsv():
     nodeIpLists = openIpAddressList(NODEIPADDRESSLIST)
@@ -457,7 +457,7 @@ def NodeCpuUsageToCsv():
         if status == "error":
             logging.error(response.json())
             sys.exit(2)
-        
+
         coreAmounts = response.json()['data']['result']
         coreAmount = len(coreAmounts)
 
@@ -473,8 +473,8 @@ def NodeCpuUsageToCsv():
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
                     cpuUsage = float(metricValue[1])/coreAmount
-                    ipAddPort = nodeIp + ":9100"
-                    writer.writerow([ipAddPort,"CpuUsage(%)",timeDate, cpuUsage])
+                    ipAddPort = nodeIp + "-9100"
+                    writer.writerow([ipAddPort,"2.CpuUsage(%)",timeDate, cpuUsage])
 
     return
 
@@ -484,7 +484,7 @@ def NodeCpuUsageToCsv():
 #   node_Exporterにて監視している対象のLinuxOSについて、                   　　#
 #   IPアドレスを利用してメトリックス情報を取得しDiskの使用率をCSV出力する関数　   #
 #                                                                           #
-############################################################################# 
+#############################################################################
 
 def NodeDiskUsageToCsv():
     nodeIpLists = openIpAddressList(NODEIPADDRESSLIST)
@@ -517,8 +517,8 @@ def NodeDiskUsageToCsv():
                 #タイムスタンプと値を記載
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
-                    ipAddPort = nodeIp + ":9100"
-                    writer.writerow([ipAddPort,"DiskUsage(%)",timeDate, metricValue[1]])
+                    ipAddPort = nodeIp + "-9100"
+                    writer.writerow([ipAddPort,"3.DiskUsage(%)",timeDate, metricValue[1]])
 
     return
 
@@ -530,7 +530,7 @@ def NodeDiskUsageToCsv():
 #   IPアドレスを利用してメトリックス情報を取得しネットワークトラフィックの        #
 # 　平均使用byteをcsv出力する関数                                             #
 #                                         　                                #
-############################################################################# 
+#############################################################################
 
 def NodeNetworkResourceUsageToCsv():
     nodeIpLists = openIpAddressList(NODEIPADDRESSLIST)
@@ -563,8 +563,8 @@ def NodeNetworkResourceUsageToCsv():
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
 #                    writeInfo = 'SendingTraffic(' + nicName + ')'
-                    writeInfo = 'OutboundTraffic'
-                    ipAddPort = nodeIp + ":9100"
+                    writeInfo = '4.OutboundTraffic'
+                    ipAddPort = nodeIp + "-9100"
                     writer.writerow([ipAddPort,writeInfo,timeDate, metricValue[1]])
 
         #受信トラフィック算出
@@ -592,8 +592,8 @@ def NodeNetworkResourceUsageToCsv():
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
 #                    writeInfo = 'ReceivingTraffic(' + nicName + ')'
-                    writeInfo = "IncomingTraffic"
-                    ipAddPort = nodeIp + ":9100"
+                    writeInfo = "5.IncomingTraffic"
+                    ipAddPort = nodeIp + "-9100"
                     writer.writerow([ipAddPort,writeInfo,timeDate, metricValue[1]])
 
     return
@@ -612,7 +612,7 @@ Prometheus duration data as csv.
 #             windows_cpu_time_total                                    #
 #             node_cpu_total                                            #
 #             hrStorageAllocationUnit                                   #
-# #######################################################################  
+# #######################################################################
 
 #(オプション)レポート追加要素
 METRICSLISTPATH='c:\\Prometheus\\metricsList.txt'
@@ -625,7 +625,7 @@ METRICSLISTPATH='c:\\Prometheus\\metricsList.txt'
 #         例)                                                           #
 #             192.168.1.200                                             #
 #             192.168.1.211                                             #
-# #######################################################################  
+# #######################################################################
 
 #WindowsIPアドレスリスト
 WINIPADDRESSLIST = 'c:\\Prometheus\\WinIpList.txt'
@@ -639,7 +639,7 @@ bWinIpFileChk = fileExistCheck(WINIPADDRESSLIST)
 #         例)                                                           #
 #             192.168.1.212                                             #
 #             192.168.1.215                                             #
-# #######################################################################  
+# #######################################################################
 
 #NodeIPアドレスリスト
 NODEIPADDRESSLIST = 'c:\\Prometheus\\NodeIpList.txt'
@@ -713,12 +713,11 @@ metricsName = ''
 #データの取得スクリプト
 for metricsName in metricsListNames:
  #オプション用の管理番号
-    count = count + 1
 # for metrixName in metrixNames:
     #取得したいメトリックスではない場合、次のメトリックスへ移動
 #     if metrixName != metricsName:
 #       continue
- 
+
      #期間指定のqueryの結果をPrometheuから取得(APIの詳細はhttps://prometheus.io/docs/prometheus/latest/querying/api/#range-vectors)
 #     response = requests.get(PROMETHEUS_URL + RANGE_QUERY_API,
 #      params={'query': metrixName, 'start': span, 'end': today_ts, 'step': RESOLUTION})
@@ -736,6 +735,9 @@ for metricsName in metricsListNames:
     #Prometheusの応答から「data」列の「result」を取得
     results = response.json()['data']['result']
 
+    if len(results):
+        count = count + 1
+
     #応答の内容を識別
     for result in results:
         #「result」の「metric」内「__name__」情報を取得(query名)
@@ -751,17 +753,17 @@ for metricsName in metricsListNames:
         metricValues = result['values']
 
         #csvファイルへの書き込みオブジェクト作成(取得するresult(job)毎にファイルを作成)
-        fileName = "C:\\Prometheus\\" + metricName + "-" + metricJob + ".csv"
+        #fileName = "C:\\Prometheus\\" + metricName + "-" + metricJob + ".csv"
 
         #csv出力先指定
         with open(RESULT_FILE, "a", newline="") as csvFile:
             writer = csv.writer(csvFile)
             #どのオプションの値を追加したか記載
 #            writeOptionInfo = "Option" + str(count) + "-" + metricName
-            writeOptionInfo = "Option" + str(count)
+            writeOptionInfo = str(count) + ".Option" + str(count)
+            writeInstance = metricInst.replace(":","-")
             #タイムスタンプと値を記載
             for metricValue in metricValues:
                 timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
-                writer.writerow([metricInst,writeOptionInfo,timeDate, metricValue[1]])
+                writer.writerow([writeInstance,writeOptionInfo,timeDate, metricValue[1]])
 
- 
