@@ -84,9 +84,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.csvFilePath.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.csvFilePath.Location = new System.Drawing.Point(236, 29);
-            this.csvFilePath.Multiline = true;
             this.csvFilePath.Name = "csvFilePath";
-            this.csvFilePath.Size = new System.Drawing.Size(480, 34);
+            this.csvFilePath.Size = new System.Drawing.Size(480, 22);
             this.csvFilePath.TabIndex = 5;
             this.csvFilePath.DragDrop += new System.Windows.Forms.DragEventHandler(this.csvFilePath_DragDrop);
             this.csvFilePath.DragEnter += new System.Windows.Forms.DragEventHandler(this.csvFilePath_DragEnter);

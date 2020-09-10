@@ -690,6 +690,8 @@ public class CreateExcelFromCsv
         return 0;
     }
 
+
+    // シート名と一致した値をList型でまとめて返すメソッド
     private static List<Dictionary<string, string>> getSpecifiedDataDictionaryList(string sheetName, List<Dictionary<string, string>> csvList)
     {
         List<Dictionary<string, string>> retDicList = new List<Dictionary<string, string>>();
@@ -722,6 +724,7 @@ public class CreateExcelFromCsv
         return retDicList;
     }
 
+    // 全てのデータからオプションだけのデータを返すメソッド
     private static List<Dictionary<string, string>> getSpecifiedOptionDictionaryList(List<Dictionary<string, string>> csvList)
     {
         List<Dictionary<string, string>> retDicList = new List<Dictionary<string, string>>();
@@ -754,6 +757,7 @@ public class CreateExcelFromCsv
         return retDicList;
     }
 
+    // 全てのデータから指定されたIPアドレスのデータだけをList型で返すメソッド
     private static List<Dictionary<string, string>> getSpecifiedOptionDictionaryList(List<Dictionary<string, string>> csvList, string ipAddress)
     {
         List<Dictionary<string, string>> retDicList = new List<Dictionary<string, string>>();
