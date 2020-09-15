@@ -42,7 +42,7 @@ public class CreateExcelFromCsv
         ofd.InitialDirectory = @"C:\";
         //[ファイルの種類]に表示される選択肢を指定する
         //指定しないとすべてのファイルが表示される
-        ofd.Filter = "csvファイル (*.csv;*.txt)|*.csv,*.txt|すべてのファイル(*.*)|*.*";
+        ofd.Filter = "csvファイル (*.csv;*.txt)|*.csv;*.txt|すべてのファイル(*.*)|*.*";
         //[ファイルの種類]ではじめに選択されるものを指定する
         //2番目の「すべてのファイル」が選択されているようにする
         ofd.FilterIndex = 2;
