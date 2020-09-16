@@ -107,6 +107,7 @@ public class CreateExcelFromCsv
          *   ・
          *   └ [m] Dictionary<[header(0),value],[header(1),value],...,[header(n),value]>
          *   
+         *   headerは4つの想定であり、「"IP"」「"DataName"」「"Time"」「"Value"」
          */
 
         // 実際のグラフ作成処理
