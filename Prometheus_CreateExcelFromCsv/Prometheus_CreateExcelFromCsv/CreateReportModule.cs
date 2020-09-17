@@ -21,6 +21,7 @@ using Microsoft.VisualBasic.FileIO;
 using Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using Prometheus_CreateExcelFromCsv;
+using System.Drawing;
 
 
 // 「※」マークは基本検証時の確認コードのため、本番時は不要となるので削除もしくはコメントアウトすること
@@ -28,6 +29,8 @@ using Prometheus_CreateExcelFromCsv;
 public class CreateExcelFromCsv
 {
     public const int MaxLength = 30;
+
+    public const int RHeight = 3;
 
     public String selectCsv()
 	{
@@ -180,6 +183,7 @@ public class CreateExcelFromCsv
         Microsoft.Office.Interop.Excel.Workbook wb = null;
         Microsoft.Office.Interop.Excel.Sheets shs = null;
         Microsoft.Office.Interop.Excel.Worksheet ws = null;
+        Range hiddenRange;
 
         // Excelワークブックの作成
         ExcelApp = new Microsoft.Office.Interop.Excel.Application();
@@ -250,8 +254,11 @@ public class CreateExcelFromCsv
         {
             // シート名からシート番号を取得し、シートオブジェクトを取得
             ws = wb.Sheets[getSheetIndex(ipList[i], wb.Sheets)];
-            // ws.Activate();  // ※検証用 ワークシートオブジェクトの取得を確認する
             cells = ws.Cells;
+
+            // Excelファイルの目盛線を非表示に変更
+            ws.Activate();
+            ExcelApp.ActiveWindow.DisplayGridlines = false;
 
             // ※検証用 「MemoryUsage(%)」のシートだけで確認
             /*
@@ -301,8 +308,11 @@ public class CreateExcelFromCsv
             // 日付情報書込み(x列)
             for (int j = 0; j < dateList.Count; j++)
             {
-                cells[1, j+2].Value = dateList[j];
+                cells[1, j + 2].Value = dateList[j];
             }
+
+            // 日付書式変更(日付のみ)
+            ws.Range[cells[1,2],cells[1,dateList.Count()+1]].NumberFormat = "d";
 
             // DataName情報書込み(Y列)
             for (int j = 0; j < dataNameList.Count; j++)
@@ -334,7 +344,12 @@ public class CreateExcelFromCsv
                 cnt = cnt+1;
             }
 
-            // cell幅調整
+            // cell高さ・幅調整
+            for (int j=1; j <= dataNameList.Count() +1; j++)
+            {
+                ws.Rows[j].RowHeight = 3;
+            }
+
             for (int j=1; j <= dateList.Count()+1; j++)
             {
                 ws.Columns[j].AutoFit();
@@ -342,7 +357,7 @@ public class CreateExcelFromCsv
 
             // グラフ作成
             var chartObjs = ws.ChartObjects() as ChartObjects;
-            double chartTop = (18.75 * (dataNameList.Count() + 2));
+            double chartTop = (RHeight * (dataNameList.Count() + 2));
             double chartLeft = 10;
             double chartWidth = 550;
             double chartHeight = 350;
@@ -381,22 +396,33 @@ public class CreateExcelFromCsv
                 chartObj = chartObjs.Add(chartLeft+j*(chartWidth+chartLeft), chartTop, chartWidth, chartHeight);
                 chart = chartObj.Chart;
                 chart.ChartType = chartType;
+                chart.HasTitle = true;
+                getChartTitle(chart, dataNameList[j]);
                 Range chartRange1 = ws.Range[ws.Cells[1, 1], ws.Cells[1, dateList.Count() + 1]];
                 Range chartRange2 = ws.Range[ws.Cells[j + 2, 1], ws.Cells[j + 2, dateList.Count() + 1]];
-                Range test = ws.Range[chartRange1,chartRange2];
                 Range cRange = ExcelApp.Union(chartRange1, chartRange2);
                 //Microsoft.Office.Interop.Excel.Ranges chartRanges = ws.Ranges[chartRange1, chartRange2];
                 //chart.SetSourceData(chartRange);
-                chart.SetSourceData(cRange);
-                
+                chart.SetSourceData(cRange);                
             }
 
+            hiddenRange = ws.Range[ws.Cells[1, 1], ws.Cells[dataNameList.Count + 1, dateList.Count + 1]];
+            hiddenRange.Font.Color = Color.FromArgb(255,255,255);
+
+//            Microsoft.Office.Interop.Excel.Range dataRange = ws.Range[ws.Cells[2, 1], ws.Cells[2, dataNameList.Count() + 1]];
+//            dataRange.Style.Numberformat = "G/標準";
+            //日付書式変更
+//            Microsoft.Office.Interop.Excel.Range dateRange = ws.Range[ws.Cells[1, 2], ws.Cells[1, dateList.Count() + 1]];
+//            dateRange.Style.Numberformat = "dd";
+
+            //hiddenRange.EntireRow.Hidden = true;
         }
 
         //excelファイルの保存
         ws = wb.Sheets[getSheetIndex(ipList[0], wb.Sheets)];
         ws.Activate();
-        string timeName = DateTime.Now.ToString("yyyy年MM月dd日");
+//        string timeName = DateTime.Now.ToString("yyyy年MM月dd日");
+        string timeName = DateTime.Now.ToString("yyyy年MM月");
         wb.SaveAs(folderPath + @"\" + timeName + @"_MonthlyReport.xlsx");
         wb.Close(false); //※検証時はコメントアウト
         ExcelApp.Quit(); //※検証時はコメントアウト
@@ -448,6 +474,7 @@ public class CreateExcelFromCsv
         Microsoft.Office.Interop.Excel.Workbook wb = null;
         Microsoft.Office.Interop.Excel.Sheets shs = null;
         Microsoft.Office.Interop.Excel.Worksheet ws = null;
+        Range hiddenRange;
 
         // Excelワークブックの作成
         ExcelApp = new Microsoft.Office.Interop.Excel.Application();
@@ -525,8 +552,11 @@ public class CreateExcelFromCsv
             
             // シート名からシート番号を取得し、シートオブジェクトを取得
             ws = wb.Sheets[getSheetIndex(ipList[i], wb.Sheets)];
-            // ws.Activate();  // ※検証用 ワークシートオブジェクトの取得を確認する
             cells = ws.Cells;
+
+            // 目盛線の削除
+            ws.Activate();
+            ExcelApp.ActiveWindow.DisplayGridlines = false;
 
             // ※検証用 「MemoryUsage(%)」のシートだけで確認
             /*
@@ -558,6 +588,9 @@ public class CreateExcelFromCsv
             {
                 cells[1, j + 2].Value = dateList[j];
             }
+
+            // 日付書式変更(日付のみ)
+            ws.Range[cells[1, 2], cells[1, dateList.Count() + 1]].NumberFormat = "d";
 
             // dataNameの分別(表の縦列になる)
             for (int j = 0; j < dataDicList.Count(); j++)
@@ -601,7 +634,12 @@ public class CreateExcelFromCsv
                 cnt = cnt + 1;
             }
 
-            // cell幅調整
+            // cell高さ・幅調整
+            for (int j = 1; j <= optionDataNameList.Count() + 1; j++)
+            {
+                ws.Rows[j].RowHeight = 3;
+            }
+
             for (int j = 1; j <= dateList.Count() + 1; j++)
             {
                 ws.Columns[j].AutoFit();
@@ -609,7 +647,7 @@ public class CreateExcelFromCsv
 
             // グラフ作成
             var chartObjs = ws.ChartObjects() as ChartObjects;
-            double chartTop = (18.75 * (optionList.Count() + 2));
+            double chartTop = (RHeight * (optionList.Count() + 2));
             double chartLeft = 10;
             double chartWidth = 550;
             double chartHeight = 350;
@@ -648,6 +686,9 @@ public class CreateExcelFromCsv
                 chartObj = chartObjs.Add(chartLeft + j * (chartWidth + chartLeft), chartTop, chartWidth, chartHeight);
                 chart = chartObj.Chart;
                 chart.ChartType = chartType;
+                chart.HasTitle = true;
+                //オプション項目にタイトルが必要な場合は以下のメソッドを使用すること
+                //getChartTitleOption(chart, optionDataNameList[j]);
                 Range chartRange1 = ws.Range[ws.Cells[1, 1], ws.Cells[1, dateList.Count() + 1]];
                 Range chartRange2 = ws.Range[ws.Cells[j + 2, 1], ws.Cells[j + 2, dateList.Count() + 1]];
                 Range test = ws.Range[chartRange1, chartRange2];
@@ -657,13 +698,15 @@ public class CreateExcelFromCsv
                 chart.SetSourceData(cRange);
 
             }
+            hiddenRange = ws.Range[ws.Cells[1, 1], ws.Cells[optionDataNameList.Count + 1, dateList.Count + 1]];
+            hiddenRange.Font.Color = Color.FromArgb(255, 255, 255);
 
         }
 
         //excelファイルの保存
         ws = wb.Sheets[getSheetIndex(ipList[0], wb.Sheets)];
         ws.Activate();
-        string timeName = DateTime.Now.ToString("yyyy年MM月dd日");
+        string timeName = DateTime.Now.ToString("yyyy年MM月");
         wb.SaveAs(folderPath + @"\" + timeName + @"_MonthlyOptionReport.xlsx");
         wb.Close(false); //※検証時はコメントアウト
         ExcelApp.Quit(); //※検証時はコメントアウト
@@ -802,6 +845,60 @@ public class CreateExcelFromCsv
 
         // DictionaryのList(DataNameでフィルターをかけられた)を返す
         return retDicList;
+    }
+
+    private static void getChartTitle(Chart chart, String dataName)
+    {
+        DateTime dt = DateTime.Now;
+        string result = dt.ToString("MM月");
+
+        ChartTitle chartTitle = chart.ChartTitle;
+        var yAxis = (Microsoft.Office.Interop.Excel.Axis)chart.Axes(Microsoft.Office.Interop.Excel.XlAxisType.xlValue, Microsoft.Office.Interop.Excel.XlAxisGroup.xlPrimary);
+        yAxis.HasTitle = true;
+        var xAxis = (Microsoft.Office.Interop.Excel.Axis)chart.Axes(Microsoft.Office.Interop.Excel.XlAxisType.xlCategory, Microsoft.Office.Interop.Excel.XlAxisGroup.xlPrimary);
+        //xAxis.HasTitle = true;
+        //xAxis.AxisTitle.Text = result;
+
+        if (dataName.Contains("MemoryUsage"))
+        {
+            chartTitle.Text = "メモリ使用率(%)";
+            yAxis.AxisTitle.Text = "%";    
+        }
+        else if (dataName.Contains("CpuUsage"))
+        {
+            chartTitle.Text = "CPU使用率(%)";
+            yAxis.AxisTitle.Text = "%";
+        }
+        else if (dataName.Contains("DiskUsage"))
+        {
+            chartTitle.Text = "Disk使用率(%)";
+            yAxis.AxisTitle.Text = "%";
+        }
+        else if (dataName.Contains("Outbound"))
+        {
+            chartTitle.Text = "送信トラフィック";
+            yAxis.AxisTitle.Text = "bps";
+        }
+        else if (dataName.Contains("Incoming"))
+        {
+            chartTitle.Text = "受信トラフィック";
+            yAxis.AxisTitle.Text = "bps";
+        }
+
+    }
+
+    //オプション項目については、顧客別対応となるため以下の内容を更新して対応する
+    private static void getChartTitleOption(Chart chart, String dataName)
+    {
+        DateTime dt = DateTime.Now;
+        string result = dt.ToString("MM月");
+
+        ChartTitle chartTitle = chart.ChartTitle;
+        var yAxis = (Microsoft.Office.Interop.Excel.Axis)chart.Axes(Microsoft.Office.Interop.Excel.XlAxisType.xlValue, Microsoft.Office.Interop.Excel.XlAxisGroup.xlPrimary);
+        yAxis.HasTitle = true;
+        var xAxis = (Microsoft.Office.Interop.Excel.Axis)chart.Axes(Microsoft.Office.Interop.Excel.XlAxisType.xlCategory, Microsoft.Office.Interop.Excel.XlAxisGroup.xlPrimary);
+        xAxis.HasTitle = true;
+        xAxis.AxisTitle.Text = result;
     }
 
 }
