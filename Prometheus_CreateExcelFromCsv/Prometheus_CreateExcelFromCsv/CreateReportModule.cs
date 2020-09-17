@@ -589,7 +589,7 @@ public class CreateExcelFromCsv
                 cells[1, j + 2].Value = dateList[j];
             }
 
-            // 日付書式変更(日付のみ)
+            // 日付書式変更(日付のみに変更)
             ws.Range[cells[1, 2], cells[1, dateList.Count() + 1]].NumberFormat = "d";
 
             // dataNameの分別(表の縦列になる)
@@ -698,6 +698,7 @@ public class CreateExcelFromCsv
                 chart.SetSourceData(cRange);
 
             }
+            // データの文字列の色を「白」に変更し、背景画面で見えないようにする
             hiddenRange = ws.Range[ws.Cells[1, 1], ws.Cells[optionDataNameList.Count + 1, dateList.Count + 1]];
             hiddenRange.Font.Color = Color.FromArgb(255, 255, 255);
 
