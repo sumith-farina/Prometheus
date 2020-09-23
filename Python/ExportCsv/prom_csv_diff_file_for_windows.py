@@ -1,21 +1,21 @@
 ###############################################################################
 #                                                                             #
-#                     Prometheus CSV出力用スクリプト                          #
+#                     Prometheus CSV出力用スクリプト                           #
 # 　前提　                                                                    #
 #   対象OS：Windows 7/8/8.1/10 or LinuxOS                                     #
-#   PowerShellもしくはコマンドにてPythonが実行できる環境が整っていること、    #
-#   かつ下記ライブラリのインストールがなされていること                        #
+#   PowerShellもしくはコマンドにてPythonが実行できる環境が整っていること、        #
+#   かつ下記ライブラリのインストールがなされていること                            #
 # 　 ・csv,datetime,dateutil,io,time,logging,math,requests,sys,getopt,        #
-#      json,dict                                                              #
+#      json,dict                                                             #
+#                                                                            #
+# 　※本説明は基本的にWindowsで使用する前提で記載しております。                   #
+#   　Linuxでの実装の場合、ファイルの格納先を変更する必要があります。              #
 #                                                                             #
-# 　※本説明は基本的にWindowsで使用する前提で記載しております。               #
-#   　Linuxでの実装の場合、ファイルの格納先を変更する必要があります。         #
-#                                                                             #
-# 　使い方                                                                    #
-#    [Windowsの場合(PowerShellにて実行)]                                      #
-#    python prom_csv_diff_file.py http://[PrometheusのIPアドレス]:9090        #
+# 　使い方                                                                     #
+#    [Windowsの場合(PowerShellにて実行)]                                       #
+#    python prom_csv_diff_file.py [PrometheusのIPアドレス]:9090                #
 #    [LinuxOSの場合]                                                          #
-#    python3 ./prom_csv_diff_file.py http://[PrometheusのIPアドレス]:9090     #
+#    python3 ./prom_csv_diff_file.py [PrometheusのIPアドレス]:9090             #
 #                                                                             #
 ###############################################################################
 
@@ -66,8 +66,7 @@ RESOLUTION = '24h'
 # #########################################################################################################
 #結果保存用ファイル
 now = datetime.now().strftime("%Y%m%d-%H%M%S")
-#RESULT_FILE = 'c:\\Prometheus\\ScrapedDataBetweenMonthAgo' + now + '.txt'
-RESULT_FILE = './ScrapedDataBetweenMonthAgo.txt'
+RESULT_FILE = 'c:\\Prometheus\\ScrapedDataBetweenMonthAgo' + now + '.txt'
 
 #現在日付取得
 today=datetime.now()
@@ -281,7 +280,7 @@ def WindowsDiskUsageToCsv():
 #        metrixName =  '(1-' + diskFreeBytes + '{instance="' + winIp + ':9182"}/' + diskSizeBytes + \
 #            '{instance="' + winIp + ':9182",volume="D:"}) * 100'
 #        response = requests.get(PROMETHEUS_URL + RANGE_QUERY_API,
-#        params={'query': metrixName, 'start': span, 'end': today_ts, 'step': RESOLUTION})
+#        params={'query': metrixName, 'start': week_ago_ts, 'end': today_ts, 'step': RESOLUTION})
 #        status = response.json()['status']
 #        if status == "error":
 #            logging.error(response.json())
@@ -295,8 +294,8 @@ def WindowsDiskUsageToCsv():
 #                writer = csv.writer(csvFile)
 #                for metricValue in metricValues:
 #                    timeDate = datetime.fromtimestamp(metricValue[0])
-#                    ipAddPort = winIp + "-9182"
-#                    writer.writerow([ipAddPort,"3.1.DiskUsage(D)",timeDate, metricValue[1]])
+#                    ipAddPort = winIp + ":9182"
+#                    writer.writerow([ipAddPort,"DiskUsage(D)",timeDate, metricValue[1]])
     return
 
 
@@ -342,7 +341,7 @@ def WindowsNetworkResourceUsageToCsv():
                 #タイムスタンプと値を記載
                 for metricValue in metricValues:
                     timeDate = datetime.fromtimestamp(metricValue[0]).strftime('%Y/%m/%d')
-                    #writeInfo = 'SendingNetworkTraffic(' + nicName + ')'
+#                    writeInfo = 'SendingNetworkTraffic(' + nicName + ')'
                     writeInfo = '4.OutboundTraffic'
                     ipAddPort = winIp + "-9182"
                     writer.writerow([ipAddPort,writeInfo,timeDate, metricValue[1]])
@@ -616,7 +615,7 @@ Prometheus duration data as csv.
 # #######################################################################
 
 #(オプション)レポート追加要素
-METRICSLISTPATH='./metricsList.txt'
+METRICSLISTPATH='c:\\Prometheus\\metricsList.txt'
 
 
 #########################################################################
@@ -629,7 +628,7 @@ METRICSLISTPATH='./metricsList.txt'
 # #######################################################################
 
 #WindowsIPアドレスリスト
-WINIPADDRESSLIST = './WinIpList.txt'
+WINIPADDRESSLIST = 'c:\\Prometheus\\WinIpList.txt'
 bWinIpFileChk = fileExistCheck(WINIPADDRESSLIST)
 
 
@@ -643,23 +642,23 @@ bWinIpFileChk = fileExistCheck(WINIPADDRESSLIST)
 # #######################################################################
 
 #NodeIPアドレスリスト
-NODEIPADDRESSLIST = './NodeIpList.txt'
+NODEIPADDRESSLIST = 'c:\\Prometheus\\NodeIpList.txt'
 nodeIpFileChk = fileExistCheck(NODEIPADDRESSLIST)
 
 
 #Prometheusのサーバ指定チェック
-if len(sys.argv) != 2:
-    print('Usage: {0} http://localhost:9090'.format(sys.argv[0]))
-    sys.exit(1)
+#if len(sys.argv) != 2:
+#    print('Usage: {0} http://localhost:9090'.format(sys.argv[0]))
+#    sys.exit(1)
 
 
 #PrometheusからMetricsの名前一覧を取得
-metrixNames=GetMetrixNames(sys.argv[1])
-#metrixNames=GetMetrixNames("http://192.168.1.212:9090")
+#metrixNames=GetMetrixNames(sys.argv[1])
+metrixNames=GetMetrixNames("http://192.168.1.212:9090")
 
 writeHeader=True
-PROMETHEUS_URL=sys.argv[1]
-#PROMETHEUS_URL="http://192.168.1.212:9090"
+#PROMETHEUS_URL=sys.argv[1]
+PROMETHEUS_URL="http://192.168.1.212:9090"
 
 #ヘッダ書込み処理
 with open(RESULT_FILE, "a", newline="") as csvFile:
@@ -693,7 +692,7 @@ if not fileChk:
     sys.exit(0)
 
 #オプションで調査するメトリックスを取得
-metricsFile = open('./metricsList.txt',"r")
+metricsFile = open('c:\\Prometheus\\metricsList.txt',"r")
 metricsList = metricsFile.read()
 metricsFile.close()
 
