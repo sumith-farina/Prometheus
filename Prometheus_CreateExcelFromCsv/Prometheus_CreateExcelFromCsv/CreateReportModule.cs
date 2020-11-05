@@ -278,6 +278,7 @@ public class CreateExcelFromCsv
                 dName = dataDicList[j]["DataName"];
                 if (dataNameList.Contains(dName) != true)
                 {
+                    // 対象のdataNameがOption項目の場合、Optionのリストに追加
                     if (dName.Contains("Option"))
                     {
                         if (optionList.Contains(dName) != true)
@@ -285,6 +286,7 @@ public class CreateExcelFromCsv
                             optionList.Add(dName);
                         }
                     }
+                    // Option以外のdataNameは通常の月間レポートのリストに追加
                     else
                     {
                         dataNameList.Add(dName);
